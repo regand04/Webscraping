@@ -9,17 +9,18 @@ def scrape_books():
     books_html = soup.find_all("article", class_= "product_pod")
 
     scraped_books = []
-    for idx, book_tag in enumerate(books_html, start=1):
+    for index, book_tag in enumerate(books_html, start=1):
         title = book_tag.h3.a["title"]
         price = book_tag.find("p", class_="price_color").text
         stock = book_tag.find("p", class_="instock availability").text.strip()
         rating = book_tag.p["class"][1]  # t.ex. "Three", "Five"
 
         scraped_books.append({
-            "id": idx,
+            "id": index,
             "title": title,
             "price": price,
             "stock": stock,
             "rating": rating
         })
     return scraped_books
+
