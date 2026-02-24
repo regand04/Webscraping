@@ -24,16 +24,25 @@ def get_books():
     # 200 ==> HTTP-statuskod OK
     return jsonify(books), 200
 
+# Endpoint gäller för en bestämd bok. ID ska vara heltal
 @app.route("/api/v1/books/<int:book_id>", methods = ["GET"])
 def get_book(book_id):
+    # Laddar  böcker
     books = load_books()
+
+    # Loopa igenom böckerna för att hitta rätt ID
     for book in books:
         if book["id"] == book_id:
+            # Returnera efterfrågade bok som JSON med statuskod OK
             return jsonify(book), 200
+    # Om ID:et inte hittas returneras felmeddelande
+    # 404 = not found
     return jsonify({"error" : "Book Not Found"}), 404
 
+# Funktionen post_book() körs om en POST-förfrågan ges till URL:en
 @app.route("/api/v1/books", methods = ["POST"])
 def post_book():
+    # Hämtar JSON-data som skickades i HTTP-förfrågan ==> python dictionary
     new_book = request.json
 
     #Krav att ha id och titel
@@ -59,8 +68,10 @@ def delete_book(book_id):
         return jsonify({"error": "Book Not Found"}), 404
     return jsonify({"message" : f"Book {book_id} deleted"}), 200
 
+# Starta Flask-servern om filen körs direkt (inte importerad)
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
 
