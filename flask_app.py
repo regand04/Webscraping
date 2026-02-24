@@ -17,9 +17,11 @@ def home():
 
 # Funktionen get_books() körs vid en GET-förfågan till URL:en nedan
 @app.route("/api/v1/books", methods = ["GET"])
-# Metod som anropar metoden load_books() och omvandlar till JSON-format
+# Metod som anropar metoden load_books() och sparar i variabeln books
 def get_books():
     books = load_books()
+    # Omvandlar python-objektet till JSON-format
+    # 200 ==> HTTP-statuskod OK
     return jsonify(books), 200
 
 @app.route("/api/v1/books/<int:book_id>", methods = ["GET"])
@@ -59,6 +61,7 @@ def delete_book(book_id):
 
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
 
