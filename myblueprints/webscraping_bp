@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+# Metod för webscraping
 def scrape_books():
     url = "https://books.toscrape.com/"
     response_obj = requests.get(url)
