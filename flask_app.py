@@ -56,25 +56,40 @@ def post_book():
     # Annars returneras den nya boken som JSON med statuskod 201 (created)
     return jsonify(new_book), 201
 
+# Endpoint gäller för att uppdatera en bestämd bok. ID ska vara heltal.
+# Funktion körs vid PUT-förfrågan till URL:en
 @app.route("/api/v1/books/<int:book_id>", methods = ["PUT"])
 def put_book(book_id):
+    # Hämtar JSON-data som skickades i HTTP-förfrågan ==> python dictionary
     updated_data = request.json
+
+    # Försöker uppdatera angivna boken
     if update_book(book_id, updated_data):
+        # Ladda böcker
         books = load_books()
+        # Loopar igenom böckerna för att hitta rätt ID
         for book  in books:
             if book["id"] == book_id:
+                # Returnera efterfrågade bok som JSON med statuskod OK
                 return jsonify(book), 200
+    # Om ID:et inte hittades returneras felmeddelande, 404 (not found)
     return jsonify({"error" :  "Book Not Found"}), 404
 
+# Endpoint gäller för att ta bort en bestämd bok. ID ska vara heltal.
+# Funktion körs vid DELETE-förfrågan till URL:en
 @app.route("/api/v1/books/<int:book_id>", methods = ["DELETE"])
 def delete_book(book_id):
+    # försöker ta bort angivna boken
     if not remove_book(book_id):
+        # Om ID:et inte finns returneras felmeddelande, 404 = not found
         return jsonify({"error": "Book Not Found"}), 404
+    # Annars tas boken bort och statuskod OK returneras
     return jsonify({"message" : f"Book {book_id} deleted"}), 200
 
 # Starta Flask-servern om filen körs direkt (inte importerad)
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
 
