@@ -45,11 +45,15 @@ def post_book():
     # Hämtar JSON-data som skickades i HTTP-förfrågan ==> python dictionary
     new_book = request.json
 
-    #Krav att ha id och titel
+    # Kollar om JSON-datan innehåller både ID och titel
     if "id" not in new_book or "title" not in new_book:
+        # OM något saknas returneras felmeddelande (400 = bad request)
         return jsonify({"error" : "Book Must Have ID And Title"}), 400
+    # Testa att spara boken
     if not add_book(new_book):
-        return jsonify({"error" : "BookWith This ID Already Exists."}),  400
+        # OM ID:et redan finns returneras felmeddelande
+        return jsonify({"error" : "Book With This ID Already Exists."}),  400
+    # Annars returneras den nya boken som JSON med statuskod 201 (created)
     return jsonify(new_book), 201
 
 @app.route("/api/v1/books/<int:book_id>", methods = ["PUT"])
@@ -71,6 +75,7 @@ def delete_book(book_id):
 # Starta Flask-servern om filen körs direkt (inte importerad)
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
 
