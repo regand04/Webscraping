@@ -9,11 +9,15 @@ app = Flask(__name__)
 if not load_books():
     save_books(scrape_books())
 
+# Funktionen home() körs vid GET-förfrågan till root-URL:en (/)
 @app.route("/", methods = ["GET"])
 def home():
+    # Startsida
     return "Hello from flask"
 
+# Funktionen get_books() körs vid en GET-förfågan till URL:en nedan
 @app.route("/api/v1/books", methods = ["GET"])
+# Metod som anropar metoden load_books() och omvandlar till JSON-format
 def get_books():
     books = load_books()
     return jsonify(books), 200
@@ -55,5 +59,6 @@ def delete_book(book_id):
 
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
