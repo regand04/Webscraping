@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify
 from webscraping_bp import scrape_books
 from book_data_bp import load_books, save_books, add_book, update_book, remove_book
 
+# Skapa flask-appen
 app = Flask(__name__)
 
+# Om load_books() är tom körs scrape_books() som sparas i save_books()
 if not load_books():
     save_books(scrape_books())
 
@@ -53,4 +55,5 @@ def delete_book(book_id):
 
 if __name__ == "__main__":
     app.run(debug = True)
+
 
