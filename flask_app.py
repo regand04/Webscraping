@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify
-from webscraping_bp import scrape_books
-from book_data_bp import load_books, save_books, add_book, update_book, remove_book
+from myblueprints.webscraping_bp import scrape_books, scrape_category
+from myblueprints.book_data_bp import load_books, save_books, add_book, update_book, remove_book
 
 # Skapa flask-appen
 app = Flask(__name__)
 
 # Om load_books() är tom körs scrape_books() som sparas i save_books()
 if not load_books():
-    save_books(scrape_books())
+    books = scrape_books()
+    save_books(books)
 
 # Funktionen home() körs vid GET-förfrågan till root-URL:en (/)
 @app.route("/", methods = ["GET"])
@@ -23,6 +24,11 @@ def get_books():
     # Omvandlar python-objektet till JSON-format
     # 200 ==> HTTP-statuskod OK
     return jsonify(books), 200
+
+@app.route("/api/v1/categories", methods = ["GET"])
+def get_categories():
+    categories  = scrape_category()
+    return jsonify(categories), 200
 
 # Endpoint gäller för en bestämd bok. ID ska vara heltal
 @app.route("/api/v1/books/<int:book_id>", methods = ["GET"])
@@ -89,6 +95,7 @@ def delete_book(book_id):
 # Starta Flask-servern om filen körs direkt (inte importerad)
 if __name__ == "__main__":
     app.run(debug = True)
+
 
 
 
