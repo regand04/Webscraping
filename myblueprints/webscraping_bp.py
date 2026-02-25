@@ -38,3 +38,33 @@ def scrape_books():
     # Returnerar de hämtade böckerna
     return scraped_books
 
+def scrape_category():
+    url = "https://books.toscrape.com/"
+    # GET-förfrågan till URL:en sparas i variabel
+    response_obj = requests.get(url)
+    # Sätter teckenkodning till utf-8
+    response_obj.encoding = "utf-8"
+
+    # Parsar/tolka HTML-innehållet till format som Python kan förstå och söka
+    soup = BeautifulSoup(response_obj.text, "html.parser")
+
+    # Hämtar kategorier
+    category_list = soup.find("ul", class_="nav nav-list")
+
+    # Hämtar länkarna (alla <a> taggar)
+    category_links = category_list.find_all("a")
+
+    categories = []
+
+    # Loopa igenom länkarna
+    for link in category_links:
+        # hämta text från länk och ta bort mellanslag och raddbrytningar
+        category_name = link.text.strip()
+
+        # Om namnet inte är books läggs kategorin in i listan
+        if category_name != "Books":
+            categories.append(category_name)
+
+    # Returnerar de hämtade böckerna och kategorier
+    return categories
+
